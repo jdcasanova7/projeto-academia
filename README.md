@@ -274,3 +274,12 @@ A utilização dessas chaves permite identificar os registros e manter a ligaç�
 Os relacionamentos foram definidos considerando os processos de negócio e a forma como as entidades participam das atividades da Hold Fit. As cardinalidades foram utilizadas para representar quantas ocorrências de uma entidade podem estar relacionadas a outra.
 
 Foi estruturado da seguinte forma pois, assim, as cardinalidades definidas procuram representar os vínculos existentes entre as entidades de acordo com os processos da academia, mantendo a estrutura necessária para o controle de alunos, funcionários, professores, aulas, fornecedores e informações financeiras.
+
+
+## 13. Conclusão
+
+A elaboração da primeira entrega da modelagem de dados para a Hold Fit Atividades de Condicionamento Físico LTDA permitiu estruturar com clareza o fluxo de informações da empresa, transformando uma gestão baseada em controles manuais e planilhas descentralizadas em um modelo conceitual organizado, consistente e integrado.
+
+Todo o processo de abstração foi estritamente guiado pelo levantamento das necessidades operacionais, requisitos funcionais e regras de negócio do estabelecimento. Decisões estratégicas, como a centralização do cadastro através da entidade supertipo PESSOA, a verificação obrigatória do registro profissional (CREF) e o vínculo direto entre a adimplência financeira e a liberação de acesso na catraca, garantem que a arquitetura proposta reflita fielmente a realidade do negócio e resolva seus principais gargalos.
+
+Dessa forma, o Diagrama Entidade-Relacionamento (DER) e a documentação associada não apenas cumprem os requisitos conceituais propostos, mas estabelecem uma fundação sólida para o avanço do projeto. Este modelo servirá como base direta para as etapas seguintes de desenvolvimento do sistema ERP, incluindo a elaboração do Modelo Lógico, o processo de Normalização e a implementação do Modelo Físico em um Banco de Dados Relacional.
