@@ -211,47 +211,48 @@ A tabela a seguir correlaciona os problemas operacionais e de gestão identifica
 
 ## 10 Entidades e Atributos
 
-| Entidade | Tipo | PK / FK | Atributos |
-| :--- | :--- | :--- | :--- |
-| **EMPRESA** | Forte | `cnpj` (PK) | `endereco`, `nome_fantasia`, `horario_ab`, `horario_fc`, `telefone`, `email` |
-| **PESSOA** | Forte | `cpf` (PK) | `nome`, `dt_nasci`, `endereco`, `telefone`, `email`, `genero` |
-| **ALUNO** | Fraca | `rgm` (PK), `cpf` (FK) | `cod_matricula`, `data_in`, `data_f`, `status_al` |
-| **FUNCIONARIO** | Fraca | `funcionario_id` (PK), `cpf` (FK) | `funcao`, `salario`, `carga_h`, `h_entrada`, `h_saida` |
-| **PROFESSOR** | Fraca | `cref` (PK), `funcionario_id` (FK) | `categoria_cref`, `is_responsavel_tecnico` |
-| **DEPENDENTE** | Fraca | `funcionario_id` (FK) | `parentesco` |
-| **MODALIDADE** | Forte | `modalidade_id` (PK) | `nome`, `descricao`, `capacidade`, `status`, `duracao` |
-| **TURMA** | Associativa | `modalidade_id` (FK), `rgm` (FK) | `horario_i`, `horario_f`, `data` |
-| **FORNECEDOR** | Fraca | `cpf` / `cnpj` (PK) | `razao_social` |
-| **DEPARTAMENTO**| Fraca | `n_id` (PK) | `nome`, `descricao` |
-| **DESPESAS** | Fraca | `produto_id` (PK) | `nome`, `descricao`, `validade`, `preco`, `quantidade` |
-| **MAQUINARIO** | Fraca | `maquinario_id` (PK)| `nome`, `descricao`, `preco`, `estoque` |
-| **CONTA** | Fraca | `num_conta` (PK) | `saldo`, `qnt_pendente`, `qnt_pago` |
-| **CONTAS A PAGAR**| Fraca | `pagamento_id` (PK) | `dt_pagamento`, `dt_vencimento`, `tipo` |
-| **CONTAS A RECEBER**| Fraca | `recebimento_id` (PK)| `dt_pagamento`, `dt_vencimento`, `tipo` |
-| **PLANOS** | Associativa | `rgm` (FK), `modalidade_id` (FK) | `dt_i`, `dt_f`, `valor`, `nome`, `descricao`, `desconto` |
+| ENTIDADE | TIPO | PK e FK | ATRIBUTOS |
+|----------|------|---------|-----------|
+| EMPRESA | Entidade Forte | id_cnpj (PK) | endereco, nome_fantasia, horario_ab, horario_fc, telefone, email |
+| PESSOA | Entidade Forte | id_cpf (PK) | nome, dt_nasc, endereco, telefone, email, genero |
+| ALUNO | Entidade Fraca | id_rgm (PK) | cod_matricula, data_in, data_f, status_al |
+| FUNCIONARIO | Entidade Fraca | id_funcionario (PK) | cargo, salario, funcao, carga_h, h_entrada, h_saida |
+| PROFESSOR | Entidade Fraca | id_cref (PK) id_funcionario (FK) | id_funcionario FK, especialidade |
+| DEPENDENTE | Entidade Fraca | id_cpf (FK) | id_cpf (FK), parentesco |
+| MODALIDADE | Entidade Forte | id_modalidade (PK) | nome, duracao, status, programacao |
+| TURMA | Entidade Associativa | id_modalidade (FK) id_rgm (FK) id_cref (FK) | horario_i, horario_f, local, limiteealunos |
+| FORNECEDOR | Entidade Fraca | id_fornecedor (PK) id_cpf (FK) | nome_fantasia, cnpj, status, servico_prestado |
+| DEPARTAMENTO | Entidade Fraca | id_depto (PK) | email, telefone, descricao, hr_func |
+| DESPESAS | Entidade Fraca | id_despesas (PK) | nome, descricao, validade, valor, quantidade |
+| MAQUINARIO | Entidade Fraca | id_maquinario (PK) | nome, descricao, preco, estoque |
+| CONTA | Entidade Fraca | id_numconta (PK) | saldo, qnt_pendente, qnt_pago |
+| CONTAS A PAGAR | Entidade Fraca | id_pagamento (PK) | dt_pagamento, dt_vencimento, tipo |
+| CONTAS A RECEBER | Entidade Fraca | id_recebimento (PK) | dt_pagamento, dt_vencimento, tipo |
+| PLANOS | Entidade Associativa | id_rgm (FK) id_modalidade (FK) | dt_i, dt_f, valor, nome, descricao, desconto, moda_acessadas |
+
 
 ## 11. Relacionamentos e Cardinalidades
 
-```
-[EMPRESA] -------- (1:N) --------> [CONTAS]
-[EMPRESA] -------- (1:N) --------> [PESSOA]
-[CONTAS] --------- (1:N) --------> [CONTAS A PAGAR]
-[CONTAS] --------- (1:N) --------> [CONTAS A RECEBER]
-[CONTAS A PAGAR] - (N:N) --------> [PAGAMENTO]
-[CONTAS A RECEBER] (N:N) --------> [PAGAMENTO]
-[ALUNO] ---------- (1:N) --------> [PAGAMENTO]
-[PAGAMENTO] ------ (1:N) --------> [DESPESAS]
-[PAGAMENTO] ------ (1:N) --------> [MAQUINARIO]
-[PESSOA] --------- (1:1) --------> [ALUNO]
-[PESSOA] --------- (1:1) --------> [RESPONSÁVEL]
-[PESSOA] --------- (1:N) --------> [DEPENDENTE]
-[ALUNO] ---------- (1:1) --------> [RESPONSÁVEL]
-[ALUNO] ---------- (N:N) --------> [MODALIDADE] (via PLANO)
-[FUNCIONARIO] ---- (1:1) --------> [PROFESSOR]
-[FUNCIONARIO] ---- (1:N) --------> [DEPENDENTE]
-[FUNCIONARIO] ---- (1:N) --------> [CARGO]
-[PROFESSOR] ------ (N:N) --------> [ALUNO] (via TURMA)
-```
+| ENTIDADE | RELACIONAMENTO | ENTIDADE | CARDINALIDADE |
+|----------|----------------|----------|---------------|
+| EMPRESA | POSSUI | CONTAS | 1:N |
+| EMPRESA | CADASTRA | PESSOA | 1:N |
+| CONTAS | GERA | CONTAS A PAGAR | 1:N |
+| CONTAS | PRODUZ | CONTAS A RECEBER | 1:N |
+| CONTAS A PAGAR | PAGA | PAGAMENTO | N:N |
+| CONTAS A RECEBER | RECEBE | PAGAMENTO | N:N |
+| ALUNO | REALIZA | PAGAMENTO | 1:N |
+| PAGAMENTO | COBRE | DESPESAS | 1:N |
+| PAGAMENTO | ADQUIRE | MAQUINARIO | 1:N |
+| PESSOA | É | ALUNO | 1:1 |
+| PESSOA | TORNA | RESPONSÁVEL | 1:1 |
+| PESSOA | VIRA | DEPENDENTE | 1:N |
+| ALUNO | TEM | RESPONSÁVEL | 1:1 |
+| ALUNO | PARTICIPA (Se torna PLANO) | MODALIDADE | N:N |
+| FUNCIONARIO | TRABALHA | PROFESSOR | 1:1 |
+| FUNCIONÁRIO | DETÉM | DEPENDENTE | 1:N |
+| FUNCIONÁRIO | EXERCE | CARGO | 1:N |
+| PROFESSOR | LECIONA (Se torna TURMA) | ALUNO | N:N |
 
 ## 12. Justificativas Técnicas das Decisões
 
